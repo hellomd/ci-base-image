@@ -2,7 +2,7 @@
 AWS_ID=$1
 BUCKET=$2
 REGION=$3
-TAG=${CIRCLE_TAG:-latest} 
+TAG=$4 
 REPOSITORY=$AWS_ID.dkr.ecr.$REGION.amazonaws.com
 FULL_IMAGE_NAME=$REPOSITORY/$CIRCLE_PROJECT_REPONAME
 if [ "$TAG" == "latest" ]; then
