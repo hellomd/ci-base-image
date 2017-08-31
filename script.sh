@@ -1,7 +1,9 @@
 #! /bin/bash
+AWS_ID=$1
+BUCKET=$2
+REGION=$3
 TAG=${CIRCLE_TAG:-latest} 
-REGION=us-west-1
-REPOSITORY=261690028681.dkr.ecr.$REGION.amazonaws.com
+REPOSITORY=$AWS_ID.dkr.ecr.$REGION.amazonaws.com
 FULL_IMAGE_NAME=$REPOSITORY/$CIRCLE_PROJECT_REPONAME
 if [ "$TAG" == "latest" ]; then
     ENV_NAME=$CIRCLE_PROJECT_REPONAME-env-staging
@@ -20,7 +22,7 @@ docker push $FULL_IMAGE_NAME:$TAG
 sed -i Dockerrun.aws.json -e "s/<TAG>/$TAG/" -e "s/<IMAGE_NAME>/$REPOSITORY\/$CIRCLE_PROJECT_REPONAME/" 
 FILENAME=$TAG-Dockerrun.aws.json
 cp Dockerrun.aws.json $FILENAME
-S3_PATH="s3://hellomd-eb-deploy/$CIRCLE_PROJECT_REPONAME/$FILENAME"
+S3_PATH="s3://$BUCKET/$CIRCLE_PROJECT_REPONAME/$FILENAME"
 aws s3 cp $FILENAME $S3_PATH
 
 
