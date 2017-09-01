@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk add --no-cache py-pip docker
+RUN apk add --no-cache py-pip docker bash git openssh
 RUN pip install awscli docker-compose
 
 RUN mkdir /deploy
