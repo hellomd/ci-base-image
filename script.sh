@@ -6,8 +6,10 @@ TAG=$4
 REPOSITORY=$AWS_ID.dkr.ecr.$REGION.amazonaws.com
 FULL_IMAGE_NAME=$REPOSITORY/$CIRCLE_PROJECT_REPONAME
 if [ "$TAG" == "latest" ]; then
+    VERSION_LABEL=$CIRCLE_SHA1
     ENV_NAME=$CIRCLE_PROJECT_REPONAME-env-staging
-else 
+else
+    VERSION_LABEL=$TAG    
     ENV_NAME=$CIRCLE_PROJECT_REPONAME-env-production
 fi
 
@@ -27,5 +29,5 @@ aws s3 cp $FILENAME $S3_PATH
 
 
 # Run aws command to create a new EB application with label
-aws elasticbeanstalk create-application-version --application-name $CIRCLE_PROJECT_REPONAME  --version-label $TAG --source-bundle S3Bucket=hellomd-eb-deploy,S3Key=$CIRCLE_PROJECT_REPONAME/$FILENAME
-aws elasticbeanstalk update-environment --application-name $CIRCLE_PROJECT_REPONAME --environment-name $ENV_NAME --version-label $TAG
+aws elasticbeanstalk create-application-version --application-name $CIRCLE_PROJECT_REPONAME  --version-label $VERSION_LABEL --source-bundle S3Bucket=hellomd-eb-deploy,S3Key=$CIRCLE_PROJECT_REPONAME/$FILENAME
+aws elasticbeanstalk update-environment --application-name $CIRCLE_PROJECT_REPONAME --environment-name $ENV_NAME --version-label $VERSION_LABEL
