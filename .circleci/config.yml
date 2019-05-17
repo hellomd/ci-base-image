@@ -5,18 +5,18 @@ workflows:
   build-and-publish:
     jobs:
       - docker/publish:
-          name: build-and-publish-front-image-dockerhub
+          name: build-and-publish-node-image-dockerhub
           context: docker-hub-publishing
           filters:
             branches:
               only: master
-          image: hellomd/front-ci
-          dockerfile: front.dockerfile
+          image: hellomd/ci-node
+          dockerfile: node.dockerfile
           after_build:
             - run:
                 name: Tag as latest
                 command: |
                   docker tag \
-                    docker.io/hellomd/front-ci:$CIRCLE_SHA1 \
-                    docker.io/hellomd/front-ci:latest
-            - run: docker push docker.io/hellomd/front-ci:latest
+                    docker.io/hellomd/ci-node:$CIRCLE_SHA1 \
+                    docker.io/hellomd/ci-node:latest
+            - run: docker push docker.io/hellomd/ci-node:latest
